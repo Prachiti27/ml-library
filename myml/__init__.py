@@ -4,3 +4,4 @@ from .linear_regression import linear_regression
 from .metrics import metrics
 from .logistic_regression import logistic_regression
 from .knn import knn
+from .naive_bayes import naive_bayes
