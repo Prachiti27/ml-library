@@ -1,16 +1,16 @@
 import pandas as pd
 
-from myml.logistic_regression import LogisticRegression
+from myml.knn import KNN
 from myml.data_splitting import train_test_split
 from myml.preprocessing import StandardScaler
 from myml.metrics import (accuracy_score,precision_score,recall_score,f1_score,confusion_matrix)
 
-df = pd.read_csv("data/student_admission.csv")
+df = pd.read_csv("data/breast_cancer.csv")
 
 print(df.head())
 
-X = df[["gpa","sat_score","hours_studied"]]
-y = df["admitted"]
+X = df[["radius_mean","texture_mean"]]
+y = df["diagnosis"]
 
 X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
 
@@ -20,7 +20,7 @@ X_train = scaler.fit_transform(X_train)
 
 X_test = scaler.transform(X_test)
 
-model = LogisticRegression(learning_rate=0.01,num_iterations=5000)
+model = KNN(k=5)
 
 model.fit(X_train, y_train)
 
@@ -48,16 +48,12 @@ print(f"F1 Score : {f1:.4f}")
 print("\nConfusion Matrix:")
 print(cm)
 
-new_student = [[8.7, 1350, 12]]
+new_student = [[14.5, 20.0]]
 new_student = scaler.transform(new_student)
 
 prediction = model.predict(new_student)
 
+print("\nNew Sample")
+print("----------")
 
-print("\nNew Student")
-print("-----------")
-
-if prediction[0] == 1:
-    print("Prediction: Admitted")
-else:
-    print("Prediction: Not Admitted")
+print("Prediction:", prediction[0])
