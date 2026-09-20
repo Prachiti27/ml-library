@@ -1,33 +1,63 @@
-import numpy as np
+import pandas as pd
+
+from myml.logistic_regression import LogisticRegression
 from myml.data_splitting import train_test_split
 from myml.preprocessing import StandardScaler
-from myml.linear_regression import LinearRegression
-from myml.metrics import mean_squared_error, mean_absolute_error, r2_score
+from myml.metrics import (accuracy_score,precision_score,recall_score,f1_score,confusion_matrix)
 
-X = np.arange(20).reshape((10,2))
-y = np.arange(10)
+df = pd.read_csv("data/student_admission.csv")
 
-X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42,shuffle=True)
+print(df.head())
 
-print("X_train:\n", X_train)
-print("X_test:\n", X_test)
-print("y_train:", y_train)
-print("y_test:", y_test)
+X = df[["gpa","sat_score","hours_studied"]]
+y = df["admitted"]
+
+X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
 
 scaler = StandardScaler()
 
 X_train = scaler.fit_transform(X_train)
+
 X_test = scaler.transform(X_test)
 
-print("X_train: \n", X_train)
-print("X_test: \n", X_test)
-
-model = LinearRegression(method="gd", lr=0.01, epochs=2000)
+model = LogisticRegression(learning_rate=0.01,num_iterations=5000)
 
 model.fit(X_train, y_train)
 
 y_pred = model.predict(X_test)
 
-print("MSE: ", mean_squared_error(y_test, y_pred))
-print("MAE: ", mean_absolute_error(y_test, y_pred))
-print("R2: ", r2_score(y_test, y_pred))
+accuracy = accuracy_score(y_test, y_pred)
+
+precision = precision_score(y_test, y_pred)
+
+recall = recall_score(y_test, y_pred)
+
+f1 = f1_score(y_test, y_pred)
+
+cm = confusion_matrix(y_test, y_pred)
+
+
+print("\nModel Evaluation")
+print("----------------")
+
+print(f"Accuracy : {accuracy:.4f}")
+print(f"Precision: {precision:.4f}")
+print(f"Recall   : {recall:.4f}")
+print(f"F1 Score : {f1:.4f}")
+
+print("\nConfusion Matrix:")
+print(cm)
+
+new_student = [[8.7, 1350, 12]]
+new_student = scaler.transform(new_student)
+
+prediction = model.predict(new_student)
+
+
+print("\nNew Student")
+print("-----------")
+
+if prediction[0] == 1:
+    print("Prediction: Admitted")
+else:
+    print("Prediction: Not Admitted")
