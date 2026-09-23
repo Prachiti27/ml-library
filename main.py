@@ -1,53 +1,29 @@
 import pandas as pd
 
-from myml.random_forest import RandomForestRegressor
-from myml.data_splitting import train_test_split
-from myml.metrics import (
-    mean_squared_error,
-    mean_absolute_error,
-    r2_score
-)
-df = pd.read_csv("data/house_prices.csv")
+from myml.k_means import Kmeans
+from myml.preprocessing import StandardScaler
 
-X = df[["area","bedrooms","age"]]
-y = df["price"]
+df = pd.read_csv("data/customer_segments.csv")
 
-X_train, X_test, y_train, y_test = train_test_split(X,y,test_size=0.2,random_state=42)
+X = df[["annual_income", "spending_score"]]
 
-model = RandomForestRegressor(n_estimators=100,max_depth=5,max_features="sqrt",random_state=42)
+scaler = StandardScaler()
+X_scaled = scaler.fit_transform(X)
 
-model.fit(X_train, y_train)
+model = Kmeans(k=3,max_iters=100,random_state=42)
 
-y_pred = model.predict(X_test)
+model.fit(X_scaled)
 
-mse = mean_squared_error(y_test, y_pred)
-mae = mean_absolute_error(y_test, y_pred)
-r2 = r2_score(y_test, y_pred)
+clusters = model.predict(X_scaled)
 
+df["cluster"] = clusters
 
-print("\nModel Evaluation")
-print("----------------")
+print(df)
 
-print(f"MSE : {mse:.4f}")
-print(f"MAE : {mae:.4f}")
-print(f"R²  : {r2:.4f}")
+new_customer = [[85, 72]]
 
-print("\nActual vs Predicted")
-print("-------------------")
+new_customer_scaled = scaler.transform(new_customer)
 
-for actual, predicted in zip(y_test, y_pred):
+prediction = model.predict(new_customer_scaled)
 
-    print(
-        f"Actual: {actual:.2f} "
-        f"| Predicted: {predicted:.2f}"
-    )
-
-new_house = [[2300, 3, 2]]
-
-prediction = model.predict(new_house)
-
-
-print("\nNew House")
-print("---------")
-
-print(f"Predicted Price: ₹{prediction[0]:.2f} lakh")
+print("\nNew customer cluster:", prediction[0])
