@@ -12,9 +12,10 @@ class Node:
         return self.value is not None
     
 class DecisionTreeClassifier:
-    def __init__(self, max_depth=10, min_samples_split=2):
+    def __init__(self, max_depth=10, min_samples_split=2, max_features="sqrt"):
         self.max_depth = max_depth
         self.min_samples_split = min_samples_split
+        self.max_features = max_features
         self.root = None
         
     def fit(self, X, y):
