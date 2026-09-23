@@ -8,3 +8,5 @@ from .naive_bayes import naive_bayes
 from .decision_tree import decision_tree_classifier, decision_tree_regressor
 from .random_forest import random_forest_classifier, random_forest_regressor
 from .k_means import Kmeans
+from .pca import pca
+from .svm import svm
