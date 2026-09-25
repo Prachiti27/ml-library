@@ -1,1 +1,1 @@
-from .metrics import mean_absolute_error, mean_squared_error, r2_score, accuracy_score, precision_score, confusion_matrix, recall_score, f1_score
+from .metrics import mean_absolute_error, mean_squared_error, r2_score, accuracy_score, precision_score, confusion_matrix, recall_score, f1_score, roc_auc_score, silhouette_score, log_loss

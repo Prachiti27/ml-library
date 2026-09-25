@@ -10,3 +10,6 @@ from .random_forest import random_forest_classifier, random_forest_regressor
 from .k_means import Kmeans
 from .pca import pca
 from .svm import svm
+from .feature_selection import k_best
+from .composition import pipeline, column_tranformer
+from .hyperparameter import grid_search, randomised_search
